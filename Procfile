@@ -1,1 +1,1 @@
-worker: java -jar target/spicybot-0.0.1-SNAPSHOT.jar
+worker: java -jar target/spicybot-0.0.1-SNAPSHOT.jar $TOKEN $GUILD $CHANNEL
