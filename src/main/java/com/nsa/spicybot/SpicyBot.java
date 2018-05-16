@@ -21,6 +21,7 @@ public class SpicyBot extends ListenerAdapter
     	channel = args[2];
     	
     	JDABuilder builder = new JDABuilder( AccountType.BOT );
+    	builder.setToken( token );
     	builder.addEventListener( new SpicyBot() );
     	try {
 			discord = builder.buildBlocking();
