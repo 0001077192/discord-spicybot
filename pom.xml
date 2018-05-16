@@ -68,7 +68,7 @@
               <manifest>
                 <addClasspath>true</addClasspath>
                 <classpathPrefix>lib/</classpathPrefix>
-                <mainClass>com.nsa.spicybot.SpicyBot</mainClass>
+                <mainClass>com.nsa.spicybot.Launcher</mainClass>
               </manifest>
             </archive>
           </configuration>
