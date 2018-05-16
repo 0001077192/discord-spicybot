@@ -47,6 +47,12 @@
           <groupId>com.heroku.sdk</groupId>
           <artifactId>heroku-maven-plugin</artifactId>
           <version>2.0.3</version>
+          <configuration>
+          <appName>${heroku.appName}</appName>
+          <processTypes>
+            <web>java -jar target/spicybot-0.0.1-SNAPSHOT.jar $TOKEN $GUILD $CHANNEL</web>
+          </processTypes>
+      </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
