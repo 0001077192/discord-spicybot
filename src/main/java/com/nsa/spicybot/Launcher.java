@@ -25,7 +25,7 @@ public class Launcher
     		} ) );
     		SpicyBot.discord = builder.buildBlocking();
     		System.out.println( "Connected!" );
-    		SpicyBot.discord.getGuildById( args[1] ).getTextChannelById( args[2] ).sendMessage( "I'm online! Hello @everyone!" );
+    		SpicyBot.discord.getGuildById( args[1] ).getTextChannelById( args[2] ).sendMessage( "I'm online! Hello @everyone!" ).queue();
 		} catch( LoginException e )
     	{
 			e.printStackTrace();
