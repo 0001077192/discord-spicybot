@@ -1,1 +1,1 @@
-web: java -jar target/spicybot-1.0-jar-with-dependencies.jar $TOKEN $GUILD $CHANNEL
+worker: java -jar target/spicybot-1.0-jar-with-dependencies.jar $TOKEN $GUILD $CHANNEL
