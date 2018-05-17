@@ -16,11 +16,15 @@ public class Launcher
     	SpicyBot.init( args[0], args[1], args[2] );
     	builder.addEventListener( new SpicyBot() );
     	try {
-    		SpicyBot.discord = builder.buildBlocking();
     		Runtime.getRuntime().addShutdownHook( new Thread( () -> {
     			System.out.println( "Shutting down JDA..." );
-    			SpicyBot.discord.shutdown();
+    			if( SpicyBot.discord != null )
+    				SpicyBot.discord.shutdown();
+    			else
+    				System.err.println( "Error shutting down JDA: JDA has not been initialized!" );
     		} ) );
+    		SpicyBot.discord = builder.buildBlocking();
+    		System.out.println( "Connected!" );
     		SpicyBot.discord.getGuildById( args[1] ).getTextChannelById( args[2] ).sendMessage( "I'm online! Hello @everyone!" );
 		} catch( LoginException e )
     	{
