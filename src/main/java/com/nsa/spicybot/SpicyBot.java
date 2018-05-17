@@ -37,7 +37,7 @@ public class SpicyBot extends ListenerAdapter
     @SubscribeEvent
     public void onMessageReceived( MessageReceivedEvent evt )
     {
-    	if( evt.getChannel().getId().equals( channel ) )
-    		evt.getChannel().sendMessage( "_spicy_" );
+    	if( evt.getChannel().getId().equals( channel ) && !evt.getAuthor().isBot() )
+    		evt.getChannel().sendMessage( "_spicy_" ).queue();
     }
 }
