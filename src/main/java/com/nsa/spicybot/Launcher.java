@@ -17,6 +17,7 @@ public class Launcher
     	builder.addEventListener( new SpicyBot() );
     	try {
     		SpicyBot.discord = builder.buildBlocking();
+    		Runtime.getRuntime().addShutdownHook( new Thread( () -> SpicyBot.discord.shutdown() ) );
     		SpicyBot.discord.getGuildById( args[1] ).getTextChannelById( args[2] ).sendMessage( "I'm online! Hello @everyone!" );
 		} catch( LoginException e )
     	{

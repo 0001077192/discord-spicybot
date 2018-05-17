@@ -7,7 +7,8 @@ import net.dv8tion.jda.core.hooks.SubscribeEvent;
 
 public class SpicyBot extends ListenerAdapter
 {
-	public static JDA discord;
+	public static JDA discord = null;
+	public static SpicyBot bot = null;
 	private static String /*token, guild,*/ channel;
 	private static boolean init = true;
 	
@@ -27,6 +28,10 @@ public class SpicyBot extends ListenerAdapter
 	{
 		if( init )
 			throw new IllegalStateException( "Init must be called before creating a bot!" );
+		if( bot != null )
+			throw new IllegalStateException( "Only one bot may exist!" );
+		else
+			bot = this;
 	}
 	
     @SubscribeEvent
