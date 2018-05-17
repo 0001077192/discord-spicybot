@@ -9,6 +9,7 @@ public class Launcher
 {
 	public static void main( String[] args )
 	{
+		System.out.println( "COMMAND-LINE ARGS: " + java.util.Arrays.toString( args ) );
 		System.out.println( "Launcher has started!" );
 		JDABuilder builder = new JDABuilder( AccountType.BOT );
     	builder.setToken( args[0] );
