@@ -19,8 +19,16 @@ public class SpicyBot extends ListenerAdapter
 		//SpicyBot.guild = guild;
 		SpicyBot.channel = channel;
 		init = false;
+		
+		System.out.println( "Bot vars initialized:\nTOKEN: " + token + "\nGUILD: " + guild + "\nCHANNEL: " + channel );
 	}
     
+	public SpicyBot()
+	{
+		if( init )
+			throw new IllegalStateException( "Init must be called before creating a bot!" );
+	}
+	
     @SubscribeEvent
     public void onMessageReceived( MessageReceivedEvent evt )
     {

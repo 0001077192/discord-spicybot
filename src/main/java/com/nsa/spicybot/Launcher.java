@@ -9,6 +9,7 @@ public class Launcher
 {
 	public static void main( String[] args )
 	{
+		System.out.println( "Launcher has started!" );
 		JDABuilder builder = new JDABuilder( AccountType.BOT );
     	builder.setToken( args[0] );
     	SpicyBot.init( args[0], args[1], args[2] );
