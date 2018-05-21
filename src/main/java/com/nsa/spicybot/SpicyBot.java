@@ -1,5 +1,6 @@
 package com.nsa.spicybot;
 
+import com.nsa.spicybot.commandsystem.CommandResult;
 import com.nsa.spicybot.commandsystem.CommandSystem;
 
 import net.dv8tion.jda.core.JDA;
@@ -45,8 +46,11 @@ public class SpicyBot extends ListenerAdapter
     		String msg = evt.getMessage().getContentStripped();
     		if( isFromBotChannel( evt ) )
     			if( msg.startsWith( "" + CommandSystem.getPrefix() ) )
-    				CommandSystem.attemptExecute( evt, msg );
-    			else
+    			{
+    				CommandResult result = CommandSystem.attemptExecute( evt, msg );
+    				if( result.getMessage() != null )
+    					evt.getChannel().sendMessage( result.getMessage() ).queue();
+    			} else
     				if( CommandSystem.updateIfNeeded( evt, msg ) == null )
     					evt.getChannel().sendMessage( "_spicy_" ).queue();
     	}
