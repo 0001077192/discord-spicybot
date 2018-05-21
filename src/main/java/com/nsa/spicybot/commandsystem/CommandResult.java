@@ -37,4 +37,9 @@ public class CommandResult
 	{
 		return successful;
 	}
+	
+	public String toString()
+	{
+		return getCommand() + "; successful: " + wasSuccessful() + "; " + getMessage();
+	}
 }

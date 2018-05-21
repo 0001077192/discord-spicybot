@@ -51,9 +51,13 @@ public class SpicyBot extends ListenerAdapter
     				CommandResult result = CommandSystem.attemptExecute( evt, msg );
     				if( result.getMessage() != null )
     					evt.getChannel().sendMessage( result.getMessage() ).queue();
-    			} else
-    				if( CommandSystem.updateIfNeeded( evt, msg ) == null )
+    			} else {
+    				CommandResult result = CommandSystem.updateIfNeeded( evt, msg );
+    				if( result != null )
+    					evt.getChannel().sendMessage( result.getMessage() ).queue();
+    				else
     					evt.getChannel().sendMessage( "_spicy_" ).queue();
+    			}
     	}
     }
 	
