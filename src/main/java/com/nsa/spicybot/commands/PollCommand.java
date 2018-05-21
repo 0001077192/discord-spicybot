@@ -67,16 +67,16 @@ public class PollCommand implements IUpdateableCommand
 		if( args.length() < 1 )
 			return new CommandResult( this, getUsage() );
 		
-		if( args.get( 1 ).equalsIgnoreCase( "open" ) )
+		if( args.get( 0 ).equalsIgnoreCase( "open" ) )
 			if( args.length() > 1 )
 			{
 				PollCommand.currentPoll = this;
-				PollCommand.question = args.getRaw( 2 );
+				PollCommand.question = args.getRaw( 1 );
 				return new CommandResult( this, "Type each of the choices for your poll on its own line and say it to me:", true );
 			} else
 				return new CommandResult( this );
 		else
-			if( args.get( 1 ).equalsIgnoreCase( "close" ) )
+			if( args.get( 0 ).equalsIgnoreCase( "close" ) )
 				close();
 		return new CommandResult( this );
 	}
