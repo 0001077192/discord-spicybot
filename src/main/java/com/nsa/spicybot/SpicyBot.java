@@ -45,6 +45,7 @@ public class SpicyBot extends ListenerAdapter
     	if( !evt.getAuthor().isBot() )
     	{
     		String msg = evt.getMessage().getContentStripped();
+    		System.out.println( "Message Received: " + msg );
     		if( isFromBotChannel( evt ) )
     		{
     			if( msg.startsWith( "" + CommandSystem.getPrefix() ) )
@@ -53,15 +54,15 @@ public class SpicyBot extends ListenerAdapter
     				System.out.println( "Command Result: " + result );
     				if( result.getMessage() != null )
     					evt.getChannel().sendMessage( result.getMessage() ).queue();
+    				return;
     			}
-    		} else {
-				CommandResult result = CommandSystem.updateIfNeeded( evt, msg );
-				System.out.println( "Command Result: " + result );
-				if( result != null )
-					evt.getChannel().sendMessage( result.getMessage() ).queue();
-				else
-					evt.getChannel().sendMessage( "_spicy_" ).queue();
-			}
+    		}
+			CommandResult result = CommandSystem.updateIfNeeded( evt, msg );
+			System.out.println( "Command Result: " + result );
+			if( result != null )
+				evt.getChannel().sendMessage( result.getMessage() ).queue();
+			else
+				evt.getChannel().sendMessage( "_spicy_" ).queue();
     	}
     }
 	
