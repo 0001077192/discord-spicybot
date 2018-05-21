@@ -2,6 +2,7 @@ package com.nsa.spicybot.files;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -9,6 +10,7 @@ public class Database
 {
 	private String name;
 	private HashMap<String, String> entries = new HashMap<String, String>();
+	private ArrayList<String> keys = new ArrayList<String>();
 	
 	public static Database load( String filename )
 	{
@@ -26,6 +28,7 @@ public class Database
 					lines.put( line.substring( 0, line.indexOf( "=" ) ), line.substring( line.indexOf( "=" ) + 1 ) );
 				else
 					lines.put( "UNKNOWN", line );
+			input.close();
 			return db;
 		} catch( IOException e ) {
 			e.printStackTrace();
@@ -74,8 +77,18 @@ public class Database
 			entries.put( key, value );
 			return true;
 		} else {
+			keys.add( key );
 			entries.put( key, value );
 			return false;
 		}
+	}
+	
+	@Override
+	public String toString()
+	{
+		String dummy = name;
+		for( String key: keys )
+			dummy += "\n" + key + "=" + entries.get( key );
+		return dummy;
 	}
 }
