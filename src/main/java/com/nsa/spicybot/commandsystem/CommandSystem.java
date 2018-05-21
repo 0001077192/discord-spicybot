@@ -55,6 +55,6 @@ public class CommandSystem
 		if( defaultCommand != null )
 			return defaultCommand.getCommandInstance().executeCommand( evt, args );
 		else
-			return new CommandResult( null, "Unknown command \"" + cmd + "\"!" );
+			return new CommandResult( null, "Unknown command \"" + prefix + base + "\"!" );
 	}
 }
