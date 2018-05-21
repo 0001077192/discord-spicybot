@@ -1,5 +1,6 @@
 package com.nsa.spicybot;
 
+import com.nsa.spicybot.commands.PollCommand;
 import com.nsa.spicybot.commandsystem.CommandResult;
 import com.nsa.spicybot.commandsystem.CommandSystem;
 
@@ -23,7 +24,7 @@ public class SpicyBot extends ListenerAdapter
 		//SpicyBot.guild = guild;
 		SpicyBot.channel = channel;
 		init = false;
-		
+		CommandSystem.register( new PollCommand() );
 		System.out.println( "Bot vars initialized:\nTOKEN: " + token + "\nGUILD: " + guild + "\nCHANNEL: " + channel );
 	}
     
