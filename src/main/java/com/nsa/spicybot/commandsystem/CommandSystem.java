@@ -52,7 +52,7 @@ public class CommandSystem
 		CommandArguments args = new CommandArguments( cmd.indexOf( " " ) == -1 ? "" : cmd.substring( base.length() + 2 ) );
 		for( ICommand command: commands )
 			if( command.getCommandName().equalsIgnoreCase( base ) )
-				return command.getCommandInstance().executeCommand( evt, args );
+				return ( currentCommand = command.getCommandInstance() ).executeCommand( evt, args );
 		if( defaultCommand != null )
 			return defaultCommand.getCommandInstance().executeCommand( evt, args );
 		else
