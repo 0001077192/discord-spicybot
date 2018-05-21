@@ -1,5 +1,6 @@
 package com.nsa.spicybot.commands;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.nsa.spicybot.SpicyBot;
@@ -57,8 +58,10 @@ public class PollCommand implements IUpdateableCommand
 			return new CommandResult( this, "There are no open polls!" );
 		PollCommand.question = null;
 		PollCommand.choices = null;
+		PollCommand.channel = null;
 		PollCommand.currentPoll = null;
-		return new CommandResult( this, "The current poll has been closed. You don't get to see the results." );
+		PollCommand.poll = null;
+		return new CommandResult( this, "The current poll has been closed. Results: " + Arrays.toString( poll ) );
 	}
 	
 	@Override
@@ -76,7 +79,7 @@ public class PollCommand implements IUpdateableCommand
 			}
 		else
 			if( args.get( 0 ).equalsIgnoreCase( "close" ) )
-				close();
+				return close();
 		
 		return new CommandResult( this, getUsage() );
 	}
@@ -90,32 +93,33 @@ public class PollCommand implements IUpdateableCommand
 	@Override
 	public CommandResult updateCommand( MessageReceivedEvent evt, String data )
 	{
-		if( PollCommand.choices == null )
-		{
-			PollCommand.choices = data.split( "\n" );
-			return new CommandResult( this, "What channel do you want to send the poll in?", true );
-		}
-		
-		if( PollCommand.channel == null )
-		{
-			List<TextChannel> channels = evt.getJDA().getTextChannelsByName( data, true );
-			if( channels.size() < 1 )
-				return new CommandResult( this, "What channel do you want to send the poll in?", false );
-			PollCommand.channel = data;
-			String dummy = "NEW POLL:\n" + PollCommand.question;
-			for( int i = 0; i < choices.length; i++ )
-				dummy += "\n" + i + ": " + choices[i];
-			dummy += "\n\nTo cast your vote, say \"vote <choice>\", where <choice> is the number of your choice!";
-			for( TextChannel chan: channels )
-				chan.sendMessage( dummy ).queue();
-			poll = new int[choices.length];
-			return new CommandResult( this, "The poll has been created! Use \"" + CommandSystem.getPrefix() + "poll close\" to close the poll!" );
-		}
-		
 		if( SpicyBot.isFromBotChannel( evt ) )
+		{
+			if( PollCommand.choices == null )
+			{
+				PollCommand.choices = data.split( "\n" );
+				return new CommandResult( this, "What channel do you want to send the poll in?", true );
+			}
+			
+			if( PollCommand.channel == null )
+			{
+				List<TextChannel> channels = evt.getJDA().getTextChannelsByName( data, true );
+				if( channels.size() < 1 )
+					return new CommandResult( this, "What channel do you want to send the poll in?", false );
+				PollCommand.channel = data;
+				String dummy = "NEW POLL:\n" + PollCommand.question;
+				for( int i = 0; i < choices.length; i++ )
+					dummy += "\n" + i + ": " + choices[i];
+				dummy += "\n\nTo cast your vote, say \"vote <choice>\", where <choice> is the number of your choice!";
+				for( TextChannel chan: channels )
+					chan.sendMessage( dummy ).queue();
+				poll = new int[choices.length];
+				return new CommandResult( this, "The poll has been created! Use \"" + CommandSystem.getPrefix() + "poll close\" to close the poll!" );
+			}
+			
 			return new CommandResult( this, "Use \"" + CommandSystem.getPrefix() + "poll close\" to close the current poll!" );
-		else
-			if( data.toLowerCase().startsWith( "vote" ) )
+		} else
+			if( !SpicyBot.isFromBotChannel( evt ) && data.toLowerCase().startsWith( "vote" ) )
 				try {
 					int vote = Integer.parseInt( data.substring( 5 ) );
 					poll[vote]++;
