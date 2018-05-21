@@ -43,6 +43,7 @@ public class CommandSystem
 	
 	public static CommandResult attemptExecute( MessageReceivedEvent evt, String cmd )
 	{
+		System.out.println( "Attempting execute: " + cmd );
 		cmd = cmd.trim();
 		if( !cmd.toLowerCase().startsWith( "" + prefix ) )
 			return new CommandResult( null, "A command starts with a(n) \'" + prefix + "\'!" );

@@ -73,18 +73,18 @@ public class PollCommand implements IUpdateableCommand
 				PollCommand.currentPoll = this;
 				PollCommand.question = args.getRaw( 1 );
 				return new CommandResult( this, "Type each of the choices for your poll on its own line and say it to me:", true );
-			} else
-				return new CommandResult( this );
+			}
 		else
 			if( args.get( 0 ).equalsIgnoreCase( "close" ) )
 				close();
-		return new CommandResult( this );
+		
+		return new CommandResult( this, getUsage() );
 	}
 	
 	@Override
 	public boolean waitingForUpdate()
 	{
-		return currentPoll != null;
+		return currentPoll != null || question == null || choices == null || channel == null || poll == null;
 	}
 	
 	@Override
@@ -119,7 +119,7 @@ public class PollCommand implements IUpdateableCommand
 				try {
 					int vote = Integer.parseInt( data.substring( 5 ) );
 					poll[vote]++;
-					return new CommandResult( this, "Your cote has been cast, " + evt.getAuthor().getAsMention() + "!", true );
+					return new CommandResult( this, "Your vote has been cast, " + evt.getAuthor().getAsMention() + "!", true );
 				} catch( Exception e ) {
 					return new CommandResult( this, evt.getAuthor().getAsMention() + ": Valid vote choices are numbers 0-" + ( choices.length - 1 ) + "." );
 				}

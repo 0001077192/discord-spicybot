@@ -49,10 +49,12 @@ public class SpicyBot extends ListenerAdapter
     			if( msg.startsWith( "" + CommandSystem.getPrefix() ) )
     			{
     				CommandResult result = CommandSystem.attemptExecute( evt, msg );
+    				System.out.println( "Command Result: " + result );
     				if( result.getMessage() != null )
     					evt.getChannel().sendMessage( result.getMessage() ).queue();
     			} else {
     				CommandResult result = CommandSystem.updateIfNeeded( evt, msg );
+    				System.out.println( "Command Result: " + result );
     				if( result != null )
     					evt.getChannel().sendMessage( result.getMessage() ).queue();
     				else
