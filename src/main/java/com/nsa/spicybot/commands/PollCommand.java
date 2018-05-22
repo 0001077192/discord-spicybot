@@ -47,7 +47,7 @@ public class PollCommand implements IUpdateableCommand
 	
 	public CommandResult open( String question, String... choices )
 	{
-		if( PollCommand.question != null || PollCommand.choices != null )
+		if( PollCommand.currentPoll != null )
 			return new CommandResult( this, "A poll has already been opened!" );
 		PollCommand.question = question;
 		PollCommand.choices = choices;
@@ -57,7 +57,7 @@ public class PollCommand implements IUpdateableCommand
 	
 	public CommandResult close()
 	{
-		if( PollCommand.question == null || PollCommand.choices == null )
+		if( PollCommand.currentPoll == null )
 			return new CommandResult( this, "There are no open polls!" );
 		PollCommand.question = null;
 		PollCommand.choices = null;

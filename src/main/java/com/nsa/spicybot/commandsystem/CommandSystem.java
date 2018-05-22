@@ -42,8 +42,10 @@ public class CommandSystem
 		str = str.trim();
 		if( currentCommand != null && currentCommand instanceof IUpdateableCommand &&
 			( ( IUpdateableCommand ) currentCommand ).waitingForUpdate() )
+		{
+			System.out.println( "Attempting update: " + str );
 			return ( ( IUpdateableCommand ) currentCommand ).updateCommand( evt, str );
-		else
+		} else
 			return null;
 	}
 	
