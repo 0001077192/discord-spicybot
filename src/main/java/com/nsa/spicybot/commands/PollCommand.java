@@ -39,7 +39,7 @@ public class PollCommand implements IUpdateableCommand
 	
 	public String getUsage()
 	{
-		return "/poll open <question>\n/poll close";
+		return CommandSystem.getPrefix() + "poll open <question>\n" + CommandSystem.getPrefix() + "poll close";
 	}
 	
 	public CommandResult open( String question, String... choices )
@@ -61,7 +61,7 @@ public class PollCommand implements IUpdateableCommand
 		PollCommand.channel = null;
 		PollCommand.currentPoll = null;
 		PollCommand.poll = null;
-		return new CommandResult( this, "The current poll has been closed. Results: " + Arrays.toString( poll ) );
+		return new CommandResult( this, "The current poll has been closed. Results: " + Arrays.toString( poll ), true );
 	}
 	
 	@Override
@@ -87,7 +87,7 @@ public class PollCommand implements IUpdateableCommand
 	@Override
 	public boolean waitingForUpdate()
 	{
-		return currentPoll != null || question == null || choices == null || channel == null || poll == null;
+		return currentPoll != null && ( question == null || choices == null || channel == null || poll == null );
 	}
 	
 	@Override

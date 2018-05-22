@@ -31,6 +31,12 @@ public class CommandSystem
 		return prefix;
 	}
 	
+	public static ICommand[] getRegisteredCommands()
+	{
+		ICommand[] dummy = new ICommand[commands.size()];
+		return commands.toArray( dummy );
+	}
+	
 	public static CommandResult updateIfNeeded( MessageReceivedEvent evt, String str )
 	{
 		str = str.trim();
