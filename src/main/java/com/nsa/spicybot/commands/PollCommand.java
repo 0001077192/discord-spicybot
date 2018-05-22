@@ -59,13 +59,14 @@ public class PollCommand implements IUpdateableCommand
 	{
 		if( PollCommand.currentPoll == null )
 			return new CommandResult( this, "There are no open polls!" );
+		String results = Arrays.toString( poll );
 		PollCommand.question = null;
 		PollCommand.choices = null;
 		PollCommand.channel = null;
 		PollCommand.currentPoll = null;
 		PollCommand.poll = null;
 		PollCommand.votes = null;
-		return new CommandResult( this, "The current poll has been closed. Results: " + Arrays.toString( poll ), true );
+		return new CommandResult( this, "The current poll has been closed. Results: " + results, true );
 	}
 	
 	@Override
