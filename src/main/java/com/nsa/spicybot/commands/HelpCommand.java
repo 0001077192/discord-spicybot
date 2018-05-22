@@ -30,9 +30,9 @@ public class HelpCommand implements ICommand
 	@Override
 	public CommandResult executeCommand( MessageReceivedEvent evt, CommandArguments args )
 	{
-		String dummy = "Command Help\n<Angle Bracketed Arguments> are required\n[Square Bracketed Arguments] are not\n\n";
+		String dummy = "Command Help\nEx: " + CommandSystem.getPrefix() + "cmd <required> [optional]\n";
 		for( ICommand cmd: CommandSystem.getRegisteredCommands() )
-			dummy += cmd.getUsage();
+			dummy += "\n" + cmd.getUsage();
 		return new CommandResult( this, dummy, true );
 	}
 }
