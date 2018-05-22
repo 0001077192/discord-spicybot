@@ -60,6 +60,11 @@ public class PollCommand implements IUpdateableCommand
 		if( PollCommand.currentPoll == null )
 			return new CommandResult( this, "There are no open polls!" );
 		String results = Arrays.toString( poll );
+		int max = 0;
+		for( int i = 1; i < poll.length; i++ )
+			if( poll[i] > poll[max] )
+				max = i;
+		results += "Option " + max + " Wins! (" + choices[max] + ")";
 		PollCommand.question = null;
 		PollCommand.choices = null;
 		PollCommand.channel = null;
