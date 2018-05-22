@@ -120,7 +120,7 @@ public class PollCommand implements IUpdateableCommand
 				return new CommandResult( this, "The poll has been created! Use \"" + CommandSystem.getPrefix() + "poll close\" to close the poll!" );
 			}
 			
-			if( data.length() > 6 && new CommandArguments( data.substring( 6 ) ).get( 0 ).equalsIgnoreCase( "close" ) )
+			if( data.length() > 6 && data.substring( 6 ).toLowerCase().startsWith( "close" ) )
 				return close();
 			else
 				return new CommandResult( this, "Use \"" + CommandSystem.getPrefix() + "poll close\" to close the current poll!" );
