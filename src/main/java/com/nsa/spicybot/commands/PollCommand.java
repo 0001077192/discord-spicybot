@@ -117,7 +117,10 @@ public class PollCommand implements IUpdateableCommand
 				return new CommandResult( this, "The poll has been created! Use \"" + CommandSystem.getPrefix() + "poll close\" to close the poll!" );
 			}
 			
-			return new CommandResult( this, "Use \"" + CommandSystem.getPrefix() + "poll close\" to close the current poll!" );
+			if( data.length() > 6 && new CommandArguments( data.substring( 6 ) ).get( 0 ).equalsIgnoreCase( "close" ) )
+				return close();
+			else
+				return new CommandResult( this, "Use \"" + CommandSystem.getPrefix() + "poll close\" to close the current poll!" );
 		} else
 			if( !SpicyBot.isFromBotChannel( evt ) && data.toLowerCase().startsWith( "vote" ) )
 				try {
