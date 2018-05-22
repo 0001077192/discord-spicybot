@@ -1,5 +1,7 @@
 package com.nsa.spicybot;
 
+import java.util.concurrent.TimeUnit;
+
 import com.nsa.spicybot.commands.HelpCommand;
 import com.nsa.spicybot.commands.PollCommand;
 import com.nsa.spicybot.commands.RestartCommand;
@@ -57,16 +59,16 @@ public class SpicyBot extends ListenerAdapter
     				CommandResult result = CommandSystem.attemptExecute( evt, msg );
     				System.out.println( "Command Result: " + result );
     				if( result.getMessage() != null )
-    					evt.getChannel().sendMessage( result.getMessage() ).queue();
+    					evt.getChannel().sendMessage( result.getMessage() ).queueAfter( 1, TimeUnit.SECONDS );
     				return;
     			}
     		}
 			CommandResult result = CommandSystem.updateIfNeeded( evt, msg );
 			System.out.println( "Command Result: " + result );
 			if( result != null )
-				evt.getChannel().sendMessage( result.getMessage() ).queue();
-			else
-				evt.getChannel().sendMessage( "_spicy_" ).queue();
+				evt.getChannel().sendMessage( result.getMessage() ).queueAfter( 1, TimeUnit.SECONDS );
+			//else
+			//	evt.getChannel().sendMessage( "_spicy_" ).queueAfter( 1, TimeUnit.SECONDS );
     	}
     }
 	

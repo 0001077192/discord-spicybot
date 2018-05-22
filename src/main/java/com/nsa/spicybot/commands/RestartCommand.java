@@ -30,7 +30,7 @@ public class RestartCommand implements ICommand
 	@Override
 	public CommandResult executeCommand( MessageReceivedEvent evt, CommandArguments args )
 	{
-		new Thread( () -> { try { Thread.sleep( 3000 ); } catch( InterruptedException e ) {} System.exit( 0 ); } ).start();
+		new Thread( () -> { try { Thread.sleep( 1000 ); } catch( InterruptedException e ) {} System.exit( 0 ); } ).start();
 		return new CommandResult( this, "Restarting SpicyBot...", true );
 	}
 	

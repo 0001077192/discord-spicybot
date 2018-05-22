@@ -1,5 +1,7 @@
 package com.nsa.spicybot;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.security.auth.login.LoginException;
 
 import net.dv8tion.jda.core.AccountType;
@@ -25,7 +27,7 @@ public class Launcher
     		} ) );
     		SpicyBot.discord = builder.buildBlocking();
     		System.out.println( "Connected!" );
-    		SpicyBot.discord.getGuildById( args[1] ).getTextChannelById( args[2] ).sendMessage( "I'm online! Hello @everyone!" ).queue();
+    		SpicyBot.discord.getGuildById( args[1] ).getTextChannelById( args[2] ).sendMessage( "I'm online! Hello @everyone!" ).queueAfter( 1, TimeUnit.SECONDS );
 		} catch( LoginException e )
     	{
 			e.printStackTrace();

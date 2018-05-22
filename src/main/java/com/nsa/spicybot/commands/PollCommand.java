@@ -1,6 +1,7 @@
 package com.nsa.spicybot.commands;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import com.nsa.spicybot.SpicyBot;
@@ -11,6 +12,7 @@ import com.nsa.spicybot.commandsystem.ICommand;
 import com.nsa.spicybot.commandsystem.IUpdateableCommand;
 
 import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 public class PollCommand implements IUpdateableCommand
@@ -21,6 +23,7 @@ public class PollCommand implements IUpdateableCommand
 	private static PollCommand currentPoll = null;
 	
 	private static int[] poll = null;
+	private static HashMap<User, Integer> votes = null;
 	
 	@Override
 	public String getCommandName()
@@ -61,6 +64,7 @@ public class PollCommand implements IUpdateableCommand
 		PollCommand.channel = null;
 		PollCommand.currentPoll = null;
 		PollCommand.poll = null;
+		PollCommand.votes = null;
 		return new CommandResult( this, "The current poll has been closed. Results: " + Arrays.toString( poll ), true );
 	}
 	
@@ -85,7 +89,7 @@ public class PollCommand implements IUpdateableCommand
 	@Override
 	public boolean waitingForUpdate()
 	{
-		return currentPoll != null && ( question == null || choices == null || channel == null || poll == null );
+		return currentPoll != null;
 	}
 	
 	@Override
@@ -112,6 +116,7 @@ public class PollCommand implements IUpdateableCommand
 				for( TextChannel chan: channels )
 					chan.sendMessage( dummy ).queue();
 				poll = new int[choices.length];
+				votes = new HashMap<User, Integer>();
 				return new CommandResult( this, "The poll has been created! Use \"" + CommandSystem.getPrefix() + "poll close\" to close the poll!" );
 			}
 			
@@ -120,10 +125,16 @@ public class PollCommand implements IUpdateableCommand
 			else
 				return new CommandResult( this, "Use \"" + CommandSystem.getPrefix() + "poll close\" to close the current poll!" );
 		} else
-			if( !SpicyBot.isFromBotChannel( evt ) && data.toLowerCase().startsWith( "vote" ) )
+			if( data.toLowerCase().startsWith( "vote" ) )
 				try {
 					int vote = Integer.parseInt( data.substring( 5 ) );
 					poll[vote]++;
+					if( votes.containsKey( evt.getAuthor() ) )
+					{
+						poll[votes.get( evt.getAuthor() )]--;
+						return new CommandResult( this, "Your vote has been changed, " + evt.getAuthor().getAsMention() + "!", true );
+					}
+					votes.put( evt.getAuthor(), vote );
 					return new CommandResult( this, "Your vote has been cast, " + evt.getAuthor().getAsMention() + "!", true );
 				} catch( Exception e ) {
 					return new CommandResult( this, evt.getAuthor().getAsMention() + ": Valid vote choices are numbers 0-" + ( choices.length - 1 ) + "." );
