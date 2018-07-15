@@ -1,5 +1,12 @@
 package com.nsa.spicybot;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.cert.Certificate;
 import java.util.concurrent.TimeUnit;
 
 import com.nsa.spicybot.commands.HelpCommand;
@@ -13,13 +20,21 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.hooks.SubscribeEvent;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLPeerUnverifiedException;
+
 public class SpicyBot extends ListenerAdapter
 {
 	public static JDA discord = null;
 	public static SpicyBot bot = null;
 	private static String /*token, guild,*/ channel;
 	private static boolean init = true;
-	
+	/*
+	public static void main( String[] args )
+    {
+        System.out.println( setRemoteVar( "stuff", "this is more different data" ) );
+    }
+    */
 	public static void init( String token, String guild, String channel )
 	{
 		if( !init )
@@ -31,6 +46,7 @@ public class SpicyBot extends ListenerAdapter
 		CommandSystem.register( new HelpCommand() );
 		CommandSystem.register( new RestartCommand() );
 		CommandSystem.register( new PollCommand() );
+		
 		System.out.println( "Bot vars initialized:\nTOKEN: " + token + "\nGUILD: " + guild + "\nCHANNEL: " + channel );
 	}
     
@@ -76,4 +92,185 @@ public class SpicyBot extends ListenerAdapter
 	{
 		return evt.getChannel().getId().equals( channel );
 	}
+	
+	public static String getRemoteVar( String name )
+    {
+        try {
+            URL server = new URL( "https://nsaweb.wixsite.com/spicybot/_functions/var/" + name );
+            HttpURLConnection connection = ( HttpURLConnection ) server.openConnection();
+            connection.setRequestMethod( "GET" );
+            connection.setConnectTimeout( 5000 );
+            connection.setReadTimeout( 5000 );
+            connection.connect();
+            int code = connection.getResponseCode();
+            if( code / 100 != 2 )
+            {
+                System.err.println( "Attempt to GET remote var \"" + name + "\" returned response code " + code + " (" + response( code ) + ")" );
+                try {
+                    BufferedReader in      = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );
+                    String         inputLine;
+                    StringBuilder  content = new StringBuilder();
+                    while( ( inputLine = in.readLine() ) != null )
+                        content.append( inputLine );
+                    in.close();
+                    connection.disconnect();
+                    System.err.println( content.toString() );
+                } catch( IOException e ) {
+                    System.err.println( "An error occured while attempting to read the error." );
+                    //e.printStackTrace();
+                }
+                return null;
+            }
+            BufferedReader in      = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );
+            String         inputLine;
+            StringBuilder  content = new StringBuilder();
+            while( ( inputLine = in.readLine() ) != null )
+                content.append( inputLine );
+            in.close();
+            connection.disconnect();
+            if( content.toString().indexOf( "data" ) == 2 )
+                return content.toString().substring( "{'data':'".length(), content.toString().length() - "'}".length() );
+            else
+                return null;
+        } catch( IOException e )
+        {
+            System.err.println( "Attempt to GET remote var \"" + name + "\" failed!" );
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    public static boolean setRemoteVar( String name, String value )
+    {
+        try {
+            URL server = new URL( "https://nsaweb.wixsite.com/spicybot/_functions/var/" + name + "/" + value );
+            HttpURLConnection connection = ( HttpURLConnection ) server.openConnection();
+            connection.setRequestMethod( "POST" );
+            connection.setConnectTimeout( 5000 );
+            connection.setReadTimeout( 5000 );
+            connection.connect();
+            int code = connection.getResponseCode();
+            if( code / 100 != 2 )
+            {
+                System.err.println( "Attempt to SET remote var \"" + name + "\" returned response code " + code + " (" + response( code ) + ")" );
+                try {
+                    BufferedReader in      = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );
+                    String         inputLine;
+                    StringBuilder  content = new StringBuilder();
+                    while( ( inputLine = in.readLine() ) != null )
+                        content.append( inputLine );
+                    in.close();
+                    connection.disconnect();
+                    System.err.println( content.toString() );
+                } catch( IOException e ) {
+                    System.err.println( "An error occured while attempting to read the error." );
+                    //e.printStackTrace();
+                }
+                return false;
+            } else
+                return true;
+        } catch( IOException e )
+        {
+            System.err.println( "Attempt to SET remote var \"" + name + "\" failed!" );
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    //Codes: https://www.restapitutorial.com/httpstatuscodes.html
+    public static String response( int code )
+    {
+        switch( code )
+        {
+            //Informational
+            case 100: return "CONTINUE";
+            case 101: return "SWITCHING PROTOCOLS";
+            case 102: return "PROCESSING";
+            
+            //Success
+            case 200: return "OK";
+            case 201: return "CREATED";
+            case 202: return "ACCEPTED";
+            case 203: return "NON-AUTHORITIVE INFORMATION";
+            case 204: return "NO CONTENT";
+            case 205: return "RESET CONTENT";
+            case 206: return "PARTIAL CONTENT";
+            case 207: return "MULTI-STATUS";
+            case 208: return "ALREADY REPORTED";
+            case 226: return "IM USED";
+            
+            //Redirection
+            case 300: return "MULTIPLE CHOICES";
+            case 301: return "MOVED PERMANENTLY";
+            case 302: return "FOUND";
+            case 303: return "SEE OTHER";
+            case 304: return "NOT MODIFIED";
+            case 305: return "USE PROXY";
+            case 306: return "(UNUSED??)";
+            case 307: return "TEMPORARY REDIRECT";
+            case 308: return "TEMPORARY REDIRECT (EXPERIMENTAL)";
+            
+            //Client Error
+            case 400: return "BAD REQUEST";
+            case 401: return "UNAUTHORIZED";
+            case 402: return "PAYMENT REQUIRED";
+            case 403: return "FORBIDDEN";
+            case 404: return "NOT FOUND";
+            case 405: return "METHOD NOT ALLOWED";
+            case 406: return "NOT ACCEPTABLE";
+            case 407: return "PROXY AUTHENTICATION REQUIRED";
+            case 408: return "REQUEST TIMEOUT";
+            case 409: return "CONFLICT";
+            case 410: return "GONE";
+            case 411: return "LENGTH REQUIRED";
+            case 412: return "PRECONDITION FAILED";
+            case 413: return "REQUEST ENTITY TOO LARGE";
+            case 414: return "REQUEST URI TOO LONG";
+            case 415: return "UNSUPPORTED MEDIA TYPE";
+            case 416: return "REQUESTED RANGE NOT SATISFIABLE";
+            case 417: return "EXPECTATION FAILED";
+            case 418: return "I'M A TEAPOT";
+            case 420: return "ENHANCE YOUR CALM";
+            case 422: return "UNPROCESSABLE ENTITY";
+            case 423: return "LOCKED";
+            case 424: return "FAILED DEPENDENCY";
+            case 425: return "(RESERVED CODE??)";
+            case 426: return "UPGRADE REQUIRED";
+            case 428: return "PRECONDITION REQUIRED";
+            case 429: return "TOO MANY REQUESTS";
+            case 431: return "REQUEST HEADER FIELDS TOO LARGE";
+            case 444: return "NO RESPONSE";
+            case 449: return "RETRY WITH";
+            case 450: return "BLOCKED BY WINDOWS PARENTAL CONTROLS";
+            case 451: return "UNAVAILABLE FOR LEGAL REASONS";
+            case 499: return "CLIENT CLOSED REQUEST";
+            
+            //Server Error
+            case 500: return "INTERNAL SERVER ERROR";
+            case 501: return "NOT IMPLEMENTED";
+            case 502: return "BAD GATEWAY";
+            case 503: return "SERVICE UNAVAILABLE";
+            case 504: return "GATEWAY TIMEOUT";
+            case 505: return "HTTP VERSION NOT SUPPORTED";
+            case 506: return "VARIANT ALSO NEGOTIATES";
+            case 507: return "INSUFFICIENT STORAGE";
+            case 508: return "LOOP DETECTED";
+            case 509: return "BANDWIDTH LIMIT EXCEEDED";
+            case 510: return "NOT EXTENDED";
+            case 511: return "NETWORK AUTHENTICATION REQUIRED";
+            case 598: return "NETWORK READ TIMEOUT ERROR";
+            case 599: return "NETWORK CONNECT TIMEOUT ERROR";
+            
+            default:
+                switch( code / 100 )
+                {
+                    case 1:   return "UNKNOWN INFO";
+                    case 2:   return "UNKNOWN SUCCESS";
+                    case 3:   return "UNKNOWN REDIRECTION";
+                    case 4:   return "UNKNOWN CLIENT ERROR";
+                    case 5:   return "UNKNOWN SERVER ERROR";
+                    default:  return "UNKNOWN ERROR";
+                }
+        }
+    }
 }
