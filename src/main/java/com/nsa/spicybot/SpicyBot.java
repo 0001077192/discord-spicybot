@@ -29,12 +29,12 @@ public class SpicyBot extends ListenerAdapter
 	public static SpicyBot bot = null;
 	private static String /*token, guild,*/ channel;
 	private static boolean init = true;
-	/*
+	
 	public static void main( String[] args )
     {
-        System.out.println( setRemoteVar( "stuff", "this is more different data" ) );
+        System.out.println( getRemoteVar( "stuff"/*, "this is more different data"*/ ) );
     }
-    */
+    
 	public static void init( String token, String guild, String channel )
 	{
 		if( !init )
@@ -128,10 +128,7 @@ public class SpicyBot extends ListenerAdapter
                 content.append( inputLine );
             in.close();
             connection.disconnect();
-            if( content.toString().indexOf( "data" ) == 2 )
-                return content.toString().substring( "{'data':'".length(), content.toString().length() - "'}".length() );
-            else
-                return null;
+            return content.toString();
         } catch( IOException e )
         {
             System.err.println( "Attempt to GET remote var \"" + name + "\" failed!" );
