@@ -9,7 +9,7 @@ import net.dv8tion.jda.core.JDABuilder;
 
 public class Launcher
 {
-    //Legacy args: { TOKEN, GUILD, CHANNEL }
+    //Legacy args: $TOKEN $GUILD $CHANNEL
 	public static void main( String[] args )
 	{
 		System.out.println( "COMMAND-LINE ARGS: " + java.util.Arrays.toString( args ) );
