@@ -99,8 +99,8 @@ public class SpicyBot extends ListenerAdapter
             URL server = new URL( "https://nsaweb.wixsite.com/spicybot/_functions/var/" + name );
             HttpURLConnection connection = ( HttpURLConnection ) server.openConnection();
             connection.setRequestMethod( "GET" );
-            connection.setConnectTimeout( 5000 );
-            connection.setReadTimeout( 5000 );
+            connection.setConnectTimeout( 60000 );
+            connection.setReadTimeout( 60000 );
             connection.connect();
             int code = connection.getResponseCode();
             if( code / 100 != 2 )
