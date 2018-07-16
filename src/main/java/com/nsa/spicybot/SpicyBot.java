@@ -20,6 +20,7 @@ import com.nsa.spicybot.commandsystem.CommandResult;
 import com.nsa.spicybot.commandsystem.CommandSystem;
 
 import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.entities.Emote;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.hooks.SubscribeEvent;
@@ -142,9 +143,10 @@ public class SpicyBot extends ListenerAdapter
 	
     private static String getMild( int num )
     {
+        Emote  mild  = discord.getEmotesByName( ":mild:", true ).get( 0 );
         String dummy = "";
         for( int i = 0; i < num; i++ )
-            dummy += ":mild:";
+            dummy += mild.getAsMention();
         return dummy;
     }
     
