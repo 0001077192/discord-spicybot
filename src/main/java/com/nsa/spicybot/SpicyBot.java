@@ -51,7 +51,7 @@ public class SpicyBot extends ListenerAdapter
 		CommandSystem.register( new HelpCommand() );
 		CommandSystem.register( new RestartCommand() );
 		CommandSystem.register( new PollCommand() );
-  
+		
 		System.out.println( "Bot vars initialized:\nTOKEN: " + token + "\nGUILD: " + guild + "\nCHANNEL: " + channel );
 		
 		//Bad words from https://www.freewebheaders.com/full-list-of-bad-words-banned-by-google/
