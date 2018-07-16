@@ -16,6 +16,8 @@ import java.util.regex.Pattern;
 import com.nsa.spicybot.commands.HelpCommand;
 import com.nsa.spicybot.commands.PollCommand;
 import com.nsa.spicybot.commands.RestartCommand;
+import com.nsa.spicybot.commands.SayCommand;
+import com.nsa.spicybot.commandsystem.CommandArguments;
 import com.nsa.spicybot.commandsystem.CommandResult;
 import com.nsa.spicybot.commandsystem.CommandSystem;
 
@@ -53,6 +55,7 @@ public class SpicyBot extends ListenerAdapter
 		CommandSystem.register( new HelpCommand() );
 		CommandSystem.register( new RestartCommand() );
 		CommandSystem.register( new PollCommand() );
+        CommandSystem.register( new SayCommand() );
 		
 		System.out.println( "Bot vars initialized:\nTOKEN: " + token + "\nGUILD: " + guild + "\nCHANNEL: " + channel );
 		

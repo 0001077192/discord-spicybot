@@ -1,7 +1,4 @@
-com\nsa\spicybot\files\Database.class
-com\nsa\spicybot\Launcher.class
 com\nsa\spicybot\commands\HelpCommand.class
-com\nsa\spicybot\commands\PollCommand.class
 com\nsa\spicybot\commandsystem\ICommand.class
 com\nsa\spicybot\SpicyBot.class
 com\nsa\spicybot\commandsystem\CommandResult.class
@@ -9,3 +6,7 @@ com\nsa\spicybot\commandsystem\CommandSystem.class
 com\nsa\spicybot\commandsystem\IUpdateableCommand.class
 com\nsa\spicybot\commands\RestartCommand.class
 com\nsa\spicybot\commandsystem\CommandArguments.class
+com\nsa\spicybot\commands\SayCommand.class
+com\nsa\spicybot\files\Database.class
+com\nsa\spicybot\Launcher.class
+com\nsa\spicybot\commands\PollCommand.class
