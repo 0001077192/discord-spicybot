@@ -125,7 +125,7 @@ public class SpicyBot extends ListenerAdapter
                 
                 if( isBad )
                 {
-                    evt.getMessage().delete();
+                    evt.getMessage().delete().queue();
                     evt.getChannel().sendMessage( "I think " + evt.getAuthor().getAsMention() + " meant to say:\n\n" + whatTheyMeantToSay ).queueAfter( 1, TimeUnit.SECONDS );
                 }
             }
