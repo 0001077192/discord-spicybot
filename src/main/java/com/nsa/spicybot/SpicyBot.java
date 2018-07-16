@@ -37,7 +37,8 @@ public class SpicyBot extends ListenerAdapter
     
     public static void main( String[] args )
     {
-        System.out.println( getRemoteVar( "stuff"/*, "this is more different data"*/ ) );
+        //String bad = "?badword!";
+        //System.out.println( bad.toLowerCase().replace( "badword", getMild( 3 ) ) );
     }
     
 	public static void init( String token, String guild, String channel )
@@ -104,7 +105,7 @@ public class SpicyBot extends ListenerAdapter
                     boolean isWordBad = false;
                     for( String bad: badWords )
                         if( bad.equalsIgnoreCase( w ) )
-                            isBad = true;
+                            isWordBad = true;
                     if( !isWordBad )
                         if( first )
                         {
@@ -125,7 +126,7 @@ public class SpicyBot extends ListenerAdapter
                 
                 if( isBad )
                 {
-                    evt.getMessage().delete().queue();
+                    try { evt.getMessage().delete().queue(); } catch( IllegalStateException e ) {}
                     evt.getChannel().sendMessage( "I think " + evt.getAuthor().getAsMention() + " meant to say:\n\n" + whatTheyMeantToSay ).queueAfter( 1, TimeUnit.SECONDS );
                 }
             }
