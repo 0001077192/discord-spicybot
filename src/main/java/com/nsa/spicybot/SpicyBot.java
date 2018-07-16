@@ -77,8 +77,10 @@ public class SpicyBot extends ListenerAdapter
 	}
     
     @Override
+    @SubscribeEvent
     public void onFriendRequestReceived( FriendRequestReceivedEvent evt )
     {
+        System.out.println( "Friend request received from " + evt.getUser().getName() );
         evt.getFriendRequest().accept().queue();
         evt.getFriendRequest().getUser().openPrivateChannel().queueAfter( 1, TimeUnit.SECONDS, channel -> channel.sendMessage( "Yay! We're friends now!" ) );
     }
