@@ -143,7 +143,7 @@ public class SpicyBot extends ListenerAdapter
 	
     private static String getMild( int num )
     {
-        Emote  mild  = discord.getEmotesByName( ":mild:", true ).get( 0 );
+        Emote  mild  = discord.getEmotesByName( "mild", true ).get( 0 );
         String dummy = "";
         for( int i = 0; i < num; i++ )
             dummy += mild.getAsMention();
