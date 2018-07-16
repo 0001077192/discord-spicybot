@@ -9,4 +9,5 @@ com\nsa\spicybot\commandsystem\CommandArguments.class
 com\nsa\spicybot\commands\SayCommand.class
 com\nsa\spicybot\files\Database.class
 com\nsa\spicybot\Launcher.class
+com\nsa\spicybot\commands\TellCommand.class
 com\nsa\spicybot\commands\PollCommand.class
