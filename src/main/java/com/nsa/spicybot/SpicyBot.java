@@ -1,6 +1,7 @@
 package com.nsa.spicybot;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -54,7 +55,7 @@ public class SpicyBot extends ListenerAdapter
 		System.out.println( "Bot vars initialized:\nTOKEN: " + token + "\nGUILD: " + guild + "\nCHANNEL: " + channel );
 		
 		//Bad words from https://www.freewebheaders.com/full-list-of-bad-words-banned-by-google/
-		Scanner input = new Scanner( SpicyBot.class.getResourceAsStream( "badwords.txt" ) );
+		Scanner input = new Scanner( SpicyBot.class.getResourceAsStream( "/badwords.txt" ) );
         badWords = new ArrayList<String>();
         while( input.hasNextLine() )
             badWords.add( input.nextLine() );
