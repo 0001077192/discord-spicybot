@@ -7,7 +7,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.cert.Certificate;
+import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import com.nsa.spicybot.commands.HelpCommand;
 import com.nsa.spicybot.commands.PollCommand;
@@ -29,8 +32,9 @@ public class SpicyBot extends ListenerAdapter
 	public static SpicyBot bot = null;
 	private static String /*token, guild,*/ channel;
 	private static boolean init = true;
-	
-	public static void main( String[] args )
+	private static ArrayList<String> badWords;
+    
+    public static void main( String[] args )
     {
         System.out.println( getRemoteVar( "stuff"/*, "this is more different data"*/ ) );
     }
@@ -46,8 +50,15 @@ public class SpicyBot extends ListenerAdapter
 		CommandSystem.register( new HelpCommand() );
 		CommandSystem.register( new RestartCommand() );
 		CommandSystem.register( new PollCommand() );
-		
+  
 		System.out.println( "Bot vars initialized:\nTOKEN: " + token + "\nGUILD: " + guild + "\nCHANNEL: " + channel );
+		
+		//Bad words from https://www.freewebheaders.com/full-list-of-bad-words-banned-by-google/
+		Scanner input = new Scanner( SpicyBot.class.getResourceAsStream( "badwords.txt" ) );
+        badWords = new ArrayList<String>();
+        while( input.hasNextLine() )
+            badWords.add( input.nextLine() );
+        System.out.println( "Loaded " + badWords.size() + " bad words." );
 	}
     
 	public SpicyBot()
@@ -78,7 +89,46 @@ public class SpicyBot extends ListenerAdapter
     					evt.getChannel().sendMessage( result.getMessage() ).queueAfter( 1, TimeUnit.SECONDS );
     				return;
     			}
-    		}
+    		} else {
+    		    String[] words = msg.split( " " );
+    		    String whatTheyMeantToSay = "";
+    		    boolean first = true, isBad = false;
+    		    for( String word: words )
+                {
+                    String w = word.toLowerCase();
+                    while( w.length() > 0 && !Character.isLetterOrDigit( w.charAt( 0 ) ) )
+                        w = w.substring( 1 );
+                    while( w.length() > 0 && !Character.isLetterOrDigit( w.charAt( w.length() - 1 ) ) )
+                        w = w.substring( 0, w.length() - 1 );
+                    boolean isWordBad = false;
+                    for( String bad: badWords )
+                        if( bad.equalsIgnoreCase( w ) )
+                            isBad = true;
+                    if( !isWordBad )
+                        if( first )
+                        {
+                            whatTheyMeantToSay += word;
+                            first = false;
+                        } else
+                            whatTheyMeantToSay += " " + word;
+                    else {
+                        isBad = true;
+                        if( first )
+                        {
+                            whatTheyMeantToSay += word.replace( w, getMild( w.length() ) );
+                            first = false;
+                        } else
+                            whatTheyMeantToSay += " " + word.replace( w, getMild( w.length() ) );
+                    }
+                }
+                
+                if( isBad )
+                {
+                    evt.getMessage().delete();
+                    evt.getChannel().sendMessage( "I think " + evt.getAuthor().getAsMention() + " meant to say:\n\n" + whatTheyMeantToSay ).queueAfter( 1, TimeUnit.SECONDS );
+                }
+            }
+            
 			CommandResult result = CommandSystem.updateIfNeeded( evt, msg );
 			System.out.println( "Command Result: " + result );
 			if( result != null )
@@ -88,6 +138,14 @@ public class SpicyBot extends ListenerAdapter
     	}
     }
 	
+    private static String getMild( int num )
+    {
+        String dummy = "";
+        for( int i = 0; i < num; i++ )
+            dummy += ":mild:";
+        return dummy;
+    }
+    
 	public static boolean isFromBotChannel( MessageReceivedEvent evt )
 	{
 		return evt.getChannel().getId().equals( channel );
