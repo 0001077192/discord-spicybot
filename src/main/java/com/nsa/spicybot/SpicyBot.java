@@ -116,10 +116,10 @@ public class SpicyBot extends ListenerAdapter
                         isBad = true;
                         if( first )
                         {
-                            whatTheyMeantToSay += word.replace( w, getMild( w.length() ) );
+                            whatTheyMeantToSay += word.toLowerCase().replace( w, getMild( w.length() ) );
                             first = false;
                         } else
-                            whatTheyMeantToSay += " " + word.replace( w, getMild( w.length() ) );
+                            whatTheyMeantToSay += " " + word.toLowerCase().replace( w, getMild( w.length() ) );
                     }
                 }
                 
