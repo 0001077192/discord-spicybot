@@ -18,6 +18,7 @@ import com.nsa.spicybot.commandsystem.CommandArguments;
 import com.nsa.spicybot.commandsystem.CommandResult;
 import com.nsa.spicybot.commandsystem.CommandSystem;
 
+import net.dv8tion.jda.client.events.relationship.FriendRequestReceivedEvent;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Emote;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -53,7 +54,7 @@ public class SpicyBot extends ListenerAdapter
 		CommandSystem.register( new RestartCommand() );
 		CommandSystem.register( new PollCommand() );
         CommandSystem.register( new SayCommand() );
-		CommandSystem.register( new TellCommand() );
+		//CommandSystem.register( new TellCommand() );
   
 		System.out.println( "Bot vars initialized:\nTOKEN: " + token + "\nGUILD: " + guild + "\nCHANNEL: " + channel );
 		
@@ -74,8 +75,15 @@ public class SpicyBot extends ListenerAdapter
 		else
 			bot = this;
 	}
-	
-	@Override
+    
+    @Override
+    public void onFriendRequestReceived( FriendRequestReceivedEvent evt )
+    {
+        evt.getFriendRequest().accept().queue();
+        evt.getFriendRequest().getUser().openPrivateChannel().queueAfter( 1, TimeUnit.SECONDS, channel -> channel.sendMessage( "Yay! We're friends now!" ) );
+    }
+    
+    @Override
     @SubscribeEvent
     public void onMessageReceived( MessageReceivedEvent evt )
     {
