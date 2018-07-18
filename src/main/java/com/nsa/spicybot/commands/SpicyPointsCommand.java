@@ -36,14 +36,15 @@ public class SpicyPointsCommand implements ICommand
     @Override
     public CommandResult executeCommand( MessageReceivedEvent evt, CommandArguments args )
     {
-        List<User> mentions = evt.getMessage().getMentionedUsers();
+        List<Member> mentions = evt.getMessage().getMentionedMembers();
         
         if( mentions.size() < 1 )
             return new CommandResult( this, getUsage() );
         
-        User   user = mentions.get( 0 );
-        String key  = "users." + user.getId() + ".sp";
-        Emote  coin = SpicyBot.discord.getEmotesByName( "sp", true ).get( 0 );
+        Member mem    = mentions.get( 0 );
+        String key    = "users." + mem.getUser().getId() + ".sp";
+        Emote  coin   = SpicyBot.discord.getEmotesByName( "sp", true ).get( 0 );
+        int    offset = SpicyBot.countSpaces( mem.getEffectiveName() ) + 1;
         
         String remoteVar = SpicyBot.getRemoteVar( key );
         int sp = 0;
@@ -51,19 +52,19 @@ public class SpicyPointsCommand implements ICommand
             if( remoteVar != null )
                 sp = Integer.parseInt( remoteVar );
         } catch( NumberFormatException e ) {
-            return new CommandResult( this, user.getAsMention() + "'s Official Spicy Point Count has been corrupted." );
+            return new CommandResult( this, mem.getAsMention() + "'s official " + coin.getAsMention() + " count has been corrupted." );
         }
         
-        if( args.length() < 2 )
-            return new CommandResult( this, user.getAsMention() + " has " + sp + coin + "." );
+        if( args.length() < offset + 1 )
+            return new CommandResult( this, mem.getAsMention() + " has " + sp + coin.getAsMention() + "." );
         
-        char operation = args.get( 1 ).charAt( 0 );
+        char operation = args.get( offset ).charAt( 0 );
         if( operation != '+' && operation != '-' && operation != '=' )
             return new CommandResult( this, getUsage() );
         
         int amt = 0;
         try {
-            amt = Integer.parseInt( args.get( 1 ).substring( 1 ) );
+            amt = Integer.parseInt( args.get( offset ).substring( 1 ) );
         } catch( Exception e ) {
             return new CommandResult( this, getUsage() );
         }
@@ -87,6 +88,6 @@ public class SpicyPointsCommand implements ICommand
                 successful = false;
         }
         
-        return new CommandResult( this, ( successful ? "Spicy Points Updated Successfully!" : "An error occured while attempting to update the Spicy Point count." ) + "\n" + user.getAsMention() + " has " + sp + coin + ".", successful );
+        return new CommandResult( this, ( successful ? "Spicy Points Updated Successfully!" : "An error occured while attempting to update the Spicy Point count." ) + "\n" + mem.getAsMention() + " has " + sp + coin.getAsMention() + ".", successful );
     }
 }

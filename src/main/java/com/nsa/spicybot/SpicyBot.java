@@ -56,7 +56,7 @@ public class SpicyBot extends ListenerAdapter
 		CommandSystem.register( new RestartCommand() );
 		CommandSystem.register( new PollCommand() );
         CommandSystem.register( new SayCommand() );
-		//CommandSystem.register( new TellCommand() );
+		CommandSystem.register( new TellCommand() );
         CommandSystem.register( new SpicyPointsCommand() );
   
 		System.out.println( "Bot vars initialized:\nGUILD: " + guild + "\nCHANNEL: " + channel );
@@ -365,5 +365,14 @@ public class SpicyBot extends ListenerAdapter
                     default:  return "UNKNOWN ERROR";
                 }
         }
+    }
+    
+    public static int countSpaces( String str )
+    {
+        int count = 0;
+        for( char c: str.toCharArray() )
+            if( c == ' ' )
+                count++;
+        return count;
     }
 }

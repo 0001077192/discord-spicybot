@@ -55,9 +55,9 @@ public class CommandSystem
 		cmd = cmd.trim();
 		if( !cmd.toLowerCase().startsWith( "" + prefix ) )
 			return new CommandResult( null, "A command starts with a(n) \'" + prefix + "\'!" );
-		String base = cmd.substring( 1, cmd.indexOf( " " ) == -1 ? cmd.length() : cmd.indexOf( " " ) );
+		String base = cmd.substring( 1, !cmd.contains( " " ) ? cmd.length() : cmd.indexOf( " " ) );
 		base = base.toLowerCase();
-		CommandArguments args = new CommandArguments( cmd.indexOf( " " ) == -1 ? "" : cmd.substring( base.length() + 2 ) );
+		CommandArguments args = new CommandArguments( !cmd.contains( " " ) ? "" : cmd.substring( base.length() + 2 ) );
 		for( ICommand command: commands )
 			if( command.getCommandName().equalsIgnoreCase( base ) )
 				return ( currentCommand = command.getCommandInstance() ).executeCommand( evt, args );

@@ -14,6 +14,7 @@ public class Launcher
 	{
 		System.out.println( "COMMAND-LINE ARGS: " + java.util.Arrays.toString( args ) );
 		System.out.println( "Launcher has started!" );
+		System.out.println( "Fetching bot vars..." );
 		String token = SpicyBot.getRemoteVar( "bot.token" ), guild = SpicyBot.getRemoteVar( "bot.guild" ), channel = SpicyBot.getRemoteVar( "bot.channel" );
 		args = new String[] { token, guild, channel };
 		JDABuilder builder = new JDABuilder( AccountType.BOT );
@@ -28,6 +29,7 @@ public class Launcher
     			else
     				System.err.println( "Error shutting down JDA: JDA has not been initialized!" );
     		} ) );
+    		System.out.println( "Connecting..." );
     		SpicyBot.discord = builder.buildBlocking();
     		System.out.println( "Connected!" );
     		SpicyBot.discord.getGuildById( args[1] ).getTextChannelById( args[2] ).sendMessage( "SpicyBot has been enabled." ).queueAfter( 1, TimeUnit.SECONDS );

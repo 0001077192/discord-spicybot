@@ -1,5 +1,6 @@
 package com.nsa.spicybot.commands;
 
+import com.nsa.spicybot.SpicyBot;
 import com.nsa.spicybot.commandsystem.CommandArguments;
 import com.nsa.spicybot.commandsystem.CommandResult;
 import com.nsa.spicybot.commandsystem.CommandSystem;
@@ -35,17 +36,19 @@ public class TellCommand implements ICommand
     @Override
     public CommandResult executeCommand( MessageReceivedEvent evt, CommandArguments args )
     {
-        //if( args.length() < 2 )
+        if( args.length() < 2 )
             return new CommandResult( this, getUsage() );
-        /*
-        List<Member> users = evt.getGuild().getMembersByNickname( args.get( 0 ), true );
-        String       name  = args.get( 0 );
-        boolean      found = false;
-        int          i     = 0;
-        if( users.size() != 1 )
-            return new CommandResult( this, "That user cannot be found!" );
-        users.get( 0 ).openPrivateChannel().queue( channel -> channel.sendMessage( args.getRaw( 1 ) ).queueAfter( 1, TimeUnit.SECONDS ) );
-        return new CommandResult( this, "Sending message...", true );
-        */
+        
+        List<Member> mentions = evt.getMessage().getMentionedMembers();
+        
+        if( mentions.size() < 1 )
+            return new CommandResult( this, getUsage() );
+        
+        Member  mem    = mentions.get( 0 );
+        int     offset = SpicyBot.countSpaces( mem.getEffectiveName() ) + 1;
+        
+        evt.getMessage().delete().queue();
+        mem.getUser().openPrivateChannel().queue( channel -> channel.sendMessage( args.getRaw( offset ) ).queueAfter( 1, TimeUnit.SECONDS ) );
+        return new CommandResult( this/*, "Sending message...", true*/ );
     }
 }
