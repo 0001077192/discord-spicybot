@@ -18,8 +18,10 @@ import com.nsa.spicybot.commandsystem.CommandArguments;
 import com.nsa.spicybot.commandsystem.CommandResult;
 import com.nsa.spicybot.commandsystem.CommandSystem;
 
+import net.dv8tion.jda.client.events.relationship.FriendAddedEvent;
 import net.dv8tion.jda.client.events.relationship.FriendRequestReceivedEvent;
 import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Emote;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
@@ -61,8 +63,9 @@ public class SpicyBot extends ListenerAdapter
 		//Bad words from https://www.freewebheaders.com/full-list-of-bad-words-banned-by-google/
 		Scanner input = new Scanner( SpicyBot.class.getResourceAsStream( "/badwords.txt" ) );
         badWords = new ArrayList<String>();
-        while( input.hasNextLine() )
-            badWords.add( input.nextLine() );
+        String word;
+        while( input.hasNextLine() && !( word = input.nextLine() ).trim().startsWith( "//" ) )
+            badWords.add( word );
         System.out.println( "Loaded " + badWords.size() + " bad words." );
 	}
     
@@ -75,7 +78,7 @@ public class SpicyBot extends ListenerAdapter
 		else
 			bot = this;
 	}
-    
+	
     @Override
     @SubscribeEvent
     public void onFriendRequestReceived( FriendRequestReceivedEvent evt )
@@ -84,6 +87,14 @@ public class SpicyBot extends ListenerAdapter
         evt.getFriendRequest().accept().queue();
         evt.getFriendRequest().getUser().openPrivateChannel().queueAfter( 1, TimeUnit.SECONDS, channel -> channel.sendMessage( "Yay! We're friends now!" ) );
     }
+    
+    @Override
+    @SubscribeEvent
+    public void onFriendAdded( FriendAddedEvent evt )
+    {
+        evt.getFriend().getUser().openPrivateChannel().queueAfter( 1, TimeUnit.SECONDS, channel -> channel.sendMessage( "Yay! We're friends now!" ) );
+    }
+    
     
     @Override
     @SubscribeEvent
@@ -104,6 +115,10 @@ public class SpicyBot extends ListenerAdapter
     				return;
     			}
     		} else {
+    		    if( evt.isFromType( ChannelType.PRIVATE ) && evt.getMessage().getContentStripped().toLowerCase().contains( "friend" ) )
+                {
+                    ; //SpicyBot can't have friends :(
+                }
     		    String[] words = msg.split( " " );
     		    String whatTheyMeantToSay = "";
     		    boolean first = true, isBad = false;
