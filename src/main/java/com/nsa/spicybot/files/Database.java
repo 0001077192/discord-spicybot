@@ -23,8 +23,8 @@ public class Database
 				db.setName( input.nextLine().trim() );
 			else
 				db.setName( filename );
-			while( input.hasNextLine() && ( line = input.nextLine().trim() ) != null && !line.startsWith( "#" ) )
-				if( line.indexOf( "=" ) != -1 )
+			while( input.hasNextLine() && !( line = input.nextLine().trim() ).startsWith( "#" ) )
+				if( line.contains( "=" ) )
 					lines.put( line.substring( 0, line.indexOf( "=" ) ), line.substring( line.indexOf( "=" ) + 1 ) );
 				else
 					lines.put( "UNKNOWN", line );
