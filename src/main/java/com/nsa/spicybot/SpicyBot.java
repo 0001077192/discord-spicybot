@@ -95,14 +95,14 @@ public class SpicyBot extends ListenerAdapter
     {
         evt.getFriend().getUser().openPrivateChannel().queueAfter( 1, TimeUnit.SECONDS, channel -> channel.sendMessage( "Yay! We're friends now!" ) );
     }
-    
+    /*
     @Override
     @SubscribeEvent
     public void onShutdown( ShutdownEvent evt )
     {
         discord.getGuildById( guild ).getTextChannelById( channel ).sendMessage( "SpicyBot has been disabled." ).queue();
     }
-    
+    */
     @Override
     @SubscribeEvent
     public void onMessageReceived( MessageReceivedEvent evt )
