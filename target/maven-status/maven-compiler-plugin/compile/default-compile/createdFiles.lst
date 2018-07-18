@@ -11,3 +11,4 @@ com\nsa\spicybot\files\Database.class
 com\nsa\spicybot\Launcher.class
 com\nsa\spicybot\commands\TellCommand.class
 com\nsa\spicybot\commands\PollCommand.class
+com\nsa\spicybot\commands\SpicyPointsCommand.class
