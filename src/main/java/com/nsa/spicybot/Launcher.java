@@ -32,7 +32,7 @@ public class Launcher
     		System.out.println( "Connecting..." );
     		SpicyBot.discord = builder.buildBlocking();
     		System.out.println( "Connected!" );
-    		SpicyBot.discord.getGuildById( args[1] ).getTextChannelById( args[2] ).sendMessage( "SpicyBot has been enabled." ).queueAfter( 1, TimeUnit.SECONDS );
+    		SpicyBot.discord.getGuildById( args[1] ).getTextChannelById( args[2] ).sendMessage( "Spicy Bot has been enabled." ).queueAfter( 1, TimeUnit.SECONDS );
 		} catch( LoginException e )
     	{
 			e.printStackTrace();

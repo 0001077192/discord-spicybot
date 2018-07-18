@@ -101,7 +101,7 @@ public class SpicyBot extends ListenerAdapter
     @SubscribeEvent
     public void onShutdown( ShutdownEvent evt )
     {
-        discord.getGuildById( guild ).getTextChannelById( channel ).sendMessage( "SpicyBot has been disabled." ).queue();
+        discord.getGuildById( guild ).getTextChannelById( channel ).sendMessage( "Spicy Bot has been disabled." ).queue();
     }
     
     @Override
