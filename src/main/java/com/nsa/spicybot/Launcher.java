@@ -18,7 +18,7 @@ public class Launcher
 		args = new String[] { token, guild, channel };
 		JDABuilder builder = new JDABuilder( AccountType.BOT );
     	builder.setToken( args[0] );
-    	SpicyBot.init( args[0], args[1], args[2] );
+    	SpicyBot.init( args[1], args[2] );
     	builder.addEventListener( new SpicyBot() );
     	try {
     		Runtime.getRuntime().addShutdownHook( new Thread( () -> {

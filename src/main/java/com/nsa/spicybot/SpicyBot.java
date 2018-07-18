@@ -23,6 +23,7 @@ import net.dv8tion.jda.client.events.relationship.FriendRequestReceivedEvent;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Emote;
+import net.dv8tion.jda.core.events.ShutdownEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.hooks.SubscribeEvent;
@@ -34,7 +35,7 @@ public class SpicyBot extends ListenerAdapter
 {
 	public static JDA discord = null;
 	public static SpicyBot bot = null;
-	private static String /*token, guild,*/ channel;
+	private static String /*token,*/ guild, channel;
 	private static boolean init = true;
 	private static ArrayList<String> badWords;
     
@@ -44,12 +45,11 @@ public class SpicyBot extends ListenerAdapter
         //System.out.println( bad.toLowerCase().replace( "badword", getMild( 3 ) ) );
     }
     
-	public static void init( String token, String guild, String channel )
+	public static void init( String guild, String channel )
 	{
 		if( !init )
 			throw new IllegalStateException( "Init may only be called once!" );
-		//SpicyBot.token = token;
-		//SpicyBot.guild = guild;
+		SpicyBot.guild = guild;
 		SpicyBot.channel = channel;
 		init = false;
 		CommandSystem.register( new HelpCommand() );
@@ -57,8 +57,9 @@ public class SpicyBot extends ListenerAdapter
 		CommandSystem.register( new PollCommand() );
         CommandSystem.register( new SayCommand() );
 		//CommandSystem.register( new TellCommand() );
+        CommandSystem.register( new SpicyPointsCommand() );
   
-		System.out.println( "Bot vars initialized:\nTOKEN: " + token + "\nGUILD: " + guild + "\nCHANNEL: " + channel );
+		System.out.println( "Bot vars initialized:\nGUILD: " + guild + "\nCHANNEL: " + channel );
 		
 		//Bad words from https://www.freewebheaders.com/full-list-of-bad-words-banned-by-google/
 		Scanner input = new Scanner( SpicyBot.class.getResourceAsStream( "/badwords.txt" ) );
@@ -95,6 +96,12 @@ public class SpicyBot extends ListenerAdapter
         evt.getFriend().getUser().openPrivateChannel().queueAfter( 1, TimeUnit.SECONDS, channel -> channel.sendMessage( "Yay! We're friends now!" ) );
     }
     
+    @Override
+    @SubscribeEvent
+    public void onShutdown( ShutdownEvent evt )
+    {
+        discord.getGuildById( guild ).getTextChannelById( channel ).sendMessage( "SpicyBot has been disabled." ).queue();
+    }
     
     @Override
     @SubscribeEvent
@@ -153,7 +160,7 @@ public class SpicyBot extends ListenerAdapter
                 
                 if( isBad )
                 {
-                    try { evt.getMessage().delete().queue(); } catch( IllegalStateException e ) {}
+                    try { evt.getMessage().delete().queue(); } catch( IllegalStateException ignored ) {} //Thrown if in private channel or group chat
                     evt.getChannel().sendMessage( "I think " + evt.getAuthor().getAsMention() + " meant to say:\n\n" + whatTheyMeantToSay ).queueAfter( 1, TimeUnit.SECONDS );
                 }
             }

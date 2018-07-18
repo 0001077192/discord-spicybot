@@ -40,6 +40,7 @@ public class SayCommand implements ICommand
         if( channels.size() != 1 )
             return new CommandResult( this, "That channel cannot be found!" );
         channels.get( 0 ).sendMessage( args.getRaw( 1 ) ).queueAfter( 1, TimeUnit.SECONDS );
-        return new CommandResult( this, "Sending message...", true );
+        evt.getMessage().delete().queue();
+        return new CommandResult( this/*, "Sending message...", true*/ );
     }
 }
