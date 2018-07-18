@@ -7,6 +7,7 @@ import com.nsa.spicybot.commandsystem.CommandSystem;
 import com.nsa.spicybot.commandsystem.ICommand;
 import net.dv8tion.jda.core.entities.Emote;
 import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.List;
@@ -35,13 +36,13 @@ public class SpicyPointsCommand implements ICommand
     @Override
     public CommandResult executeCommand( MessageReceivedEvent evt, CommandArguments args )
     {
-        List<Member> mentions = evt.getMessage().getMentionedMembers();
+        List<User> mentions = evt.getMessage().getMentionedUsers();
         
         if( mentions.size() < 1 )
             return new CommandResult( this, getUsage() );
         
-        Member mem  = mentions.get( 0 );
-        String key  = "users." + mem.getUser().getId() + ".sp";
+        User   user = mentions.get( 0 );
+        String key  = "users." + user.getId() + ".sp";
         Emote  coin = SpicyBot.discord.getEmotesByName( "sp", true ).get( 0 );
         
         String remoteVar = SpicyBot.getRemoteVar( key );
@@ -50,11 +51,11 @@ public class SpicyPointsCommand implements ICommand
             if( remoteVar != null )
                 sp = Integer.parseInt( remoteVar );
         } catch( NumberFormatException e ) {
-            return new CommandResult( this, mem.getAsMention() + "'s Official Spicy Point Count has been corrupted." );
+            return new CommandResult( this, user.getAsMention() + "'s Official Spicy Point Count has been corrupted." );
         }
         
         if( args.length() < 2 )
-            return new CommandResult( this, mem.getAsMention() + " has " + sp + coin + "." );
+            return new CommandResult( this, user.getAsMention() + " has " + sp + coin + "." );
         
         char operation = args.get( 1 ).charAt( 0 );
         if( operation != '+' && operation != '-' && operation != '=' )
@@ -86,6 +87,6 @@ public class SpicyPointsCommand implements ICommand
                 successful = false;
         }
         
-        return new CommandResult( this, ( successful ? "Spicy Points Updated Successfully!" : "An error occured while attempting to update the Spicy Point count." ) + "\n" + mem.getAsMention() + " has " + sp + coin + ".", successful );
+        return new CommandResult( this, ( successful ? "Spicy Points Updated Successfully!" : "An error occured while attempting to update the Spicy Point count." ) + "\n" + user.getAsMention() + " has " + sp + coin + ".", successful );
     }
 }
