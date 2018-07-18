@@ -47,7 +47,7 @@ public class SpicyPointsCommand implements ICommand
         String remoteVar = SpicyBot.getRemoteVar( key );
         int sp = 0;
         try {
-            if( remoteVar.length() > 0 )
+            if( remoteVar != null )
                 sp = Integer.parseInt( remoteVar );
         } catch( NumberFormatException e ) {
             return new CommandResult( this, mem.getAsMention() + "'s Official Spicy Point Count has been corrupted." );
