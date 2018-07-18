@@ -65,8 +65,9 @@ public class SpicyBot extends ListenerAdapter
 		Scanner input = new Scanner( SpicyBot.class.getResourceAsStream( "/badwords.txt" ) );
         badWords = new ArrayList<String>();
         String word;
-        while( input.hasNextLine() && !( word = input.nextLine() ).trim().startsWith( "//" ) )
-            badWords.add( word );
+        while( input.hasNextLine() )
+            if( !( word = input.nextLine() ).trim().startsWith( "//" ) )
+                badWords.add( word );
         System.out.println( "Loaded " + badWords.size() + " bad words." );
 	}
     
