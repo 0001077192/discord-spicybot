@@ -455,12 +455,12 @@ Christ on a cracker
 swear word
 godsdamn
 holy shit
-Jesus
-Jesus Christ
-Jesus H. Christ
-Jesus Harold Christ
-Jesus wept
-Jesus, Mary and Joseph
+//Jesus
+//Jesus Christ
+//Jesus H. Christ
+//Jesus Harold Christ
+//Jesus wept
+//Jesus, Mary and Joseph
 Judas Priest
 shit ass
 shitass
@@ -1189,7 +1189,7 @@ fukkers
 fuq
 gang-bang   
 gassy ass   
-god
+//god
 ham flap   
 how to murdep
 jackasses
