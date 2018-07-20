@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.cert.Certificate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -23,8 +24,11 @@ import net.dv8tion.jda.client.events.relationship.FriendRequestReceivedEvent;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Emote;
+import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.ShutdownEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.events.user.update.UserUpdateNameEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.hooks.SubscribeEvent;
 
@@ -80,7 +84,22 @@ public class SpicyBot extends ListenerAdapter
 		else
 			bot = this;
 	}
-	
+    
+    @Override
+    @SubscribeEvent
+    public void onReady( ReadyEvent evt )
+    {
+        discord.getGuildById( guild ).getTextChannelById( channel ).sendMessage( "Spicy Bot has been enabled." ).queue();
+        updateNames();
+    }
+    
+    @Override
+    @SubscribeEvent
+    public void onUserUpdateName( UserUpdateNameEvent evt )
+    {
+        updateNames();
+    }
+    
     @Override
     @SubscribeEvent
     public void onFriendRequestReceived( FriendRequestReceivedEvent evt )
@@ -175,6 +194,14 @@ public class SpicyBot extends ListenerAdapter
     	}
     }
 	
+    public void updateNames()
+    {
+        List<Member> members = discord.getGuildById( guild ).getMembers();
+        
+        for( Member m : members )
+            setRemoteVar( "user." + m.getUser().getId() + ".name", m.getEffectiveName() );
+    }
+    
     private static String getMild( int num )
     {
         Emote  mild  = discord.getEmotesByName( "mild", true ).get( 0 );

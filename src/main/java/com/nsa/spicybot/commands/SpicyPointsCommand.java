@@ -42,7 +42,7 @@ public class SpicyPointsCommand implements ICommand
             return new CommandResult( this, getUsage() );
         
         Member mem    = args.length() == 0 ? evt.getMember() : mentions.get( 0 );
-        String key    = "users." + mem.getUser().getId() + ".sp";
+        String key    = "user." + mem.getUser().getId() + ".sp";
         Emote  coin   = SpicyBot.discord.getEmotesByName( "sp", true ).get( 0 );
         int    offset = SpicyBot.countSpaces( mem.getEffectiveName() ) + 1;
     
