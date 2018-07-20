@@ -38,25 +38,30 @@ public class SpicyPointsCommand implements ICommand
     {
         List<Member> mentions = evt.getMessage().getMentionedMembers();
         
-        if( mentions.size() < 1 )
+        if( mentions.size() < 1 && args.length() > 0 )
             return new CommandResult( this, getUsage() );
         
-        Member mem    = mentions.get( 0 );
+        Member mem    = args.length() == 0 ? evt.getMember() : mentions.get( 0 );
         String key    = "users." + mem.getUser().getId() + ".sp";
         Emote  coin   = SpicyBot.discord.getEmotesByName( "sp", true ).get( 0 );
         int    offset = SpicyBot.countSpaces( mem.getEffectiveName() ) + 1;
-        
+    
+        boolean valid;
         String remoteVar = SpicyBot.getRemoteVar( key );
         int sp = 0;
         try {
             if( remoteVar != null )
                 sp = Integer.parseInt( remoteVar );
+            valid = true;
         } catch( NumberFormatException e ) {
-            return new CommandResult( this, mem.getAsMention() + "'s official " + coin.getAsMention() + " count has been corrupted." );
+            valid = false;
         }
         
         if( args.length() < offset + 1 )
-            return new CommandResult( this, mem.getAsMention() + " has " + sp + coin.getAsMention() + "." );
+            if( valid )
+                return new CommandResult( this, mem.getAsMention() + " has " + sp + coin.getAsMention() + "." );
+            else
+                return new CommandResult( this, mem.getAsMention() + "'s official " + coin.getAsMention() + " count has been corrupted." );
         
         char operation = args.get( offset ).charAt( 0 );
         if( operation != '+' && operation != '-' && operation != '=' )
@@ -73,11 +78,17 @@ public class SpicyPointsCommand implements ICommand
         switch( operation )
         {
             case '+':
-                successful = SpicyBot.setRemoteVar( key, "" + ( sp += amt ) );
+                if( valid )
+                    successful = SpicyBot.setRemoteVar( key, "" + ( sp += amt ) );
+                else
+                    return new CommandResult( this, mem.getAsMention() + "'s official " + coin.getAsMention() + " count has been corrupted." );
                 break;
                 
             case '-':
-                successful = SpicyBot.setRemoteVar( key, "" + ( sp -= amt ) );
+                if( valid )
+                    successful = SpicyBot.setRemoteVar( key, "" + ( sp -= amt ) );
+                else
+                    return new CommandResult( this, mem.getAsMention() + "'s official " + coin.getAsMention() + " count has been corrupted." );
                 break;
                 
             case '=':
