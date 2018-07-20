@@ -59,7 +59,7 @@ public class SpicyPointsCommand implements ICommand
         
         if( args.length() < offset + 1 )
             if( valid )
-                return new CommandResult( this, mem.getAsMention() + " has " + sp + coin.getAsMention() + "." );
+                return new CommandResult( this, mem.getAsMention() + " has " + format( sp ) + coin.getAsMention() + "." );
             else
                 return new CommandResult( this, mem.getAsMention() + "'s official " + coin.getAsMention() + " count has been corrupted." );
         
@@ -99,6 +99,23 @@ public class SpicyPointsCommand implements ICommand
                 successful = false;
         }
         
-        return new CommandResult( this, ( successful ? "Spicy Points Updated Successfully!" : "An error occured while attempting to update the Spicy Point count." ) + "\n" + mem.getAsMention() + " has " + sp + coin.getAsMention() + ".", successful );
+        return new CommandResult( this, ( successful ? "Spicy Points Updated Successfully!" : "An error occured while attempting to update the Spicy Point count." ) + "\n" + mem.getAsMention() + " has " + format( sp ) + coin.getAsMention() + ".", successful );
+    }
+    
+    /**
+     * @return num, with comma separators
+     */
+    public static String format( int num )
+    {
+        String original = "" + num;
+        String dummy = original.length() % 3 != 0 ? original.substring( 0, original.length() % 3 ) + "," : "";
+        
+        for( int i = original.length() % 3; i < original.length(); i += 3 )
+            dummy += original.substring( i, i + 3 ) + ",";
+        
+        if( dummy.endsWith( "," ) )
+            dummy = dummy.substring( 0, dummy.length() - 1 );
+        
+        return dummy;
     }
 }
