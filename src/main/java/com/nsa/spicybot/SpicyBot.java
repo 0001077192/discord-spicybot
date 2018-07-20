@@ -27,6 +27,7 @@ import net.dv8tion.jda.core.entities.Emote;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.ShutdownEvent;
+import net.dv8tion.jda.core.events.guild.member.GuildMemberNickChangeEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.user.update.UserUpdateNameEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
@@ -97,6 +98,13 @@ public class SpicyBot extends ListenerAdapter
     @Override
     @SubscribeEvent
     public void onUserUpdateName( UserUpdateNameEvent evt )
+    {
+        updateNames();
+    }
+    
+    @Override
+    @SubscribeEvent
+    public void onGuildMemberNickChange( GuildMemberNickChangeEvent event )
     {
         updateNames();
     }
@@ -200,7 +208,7 @@ public class SpicyBot extends ListenerAdapter
         List<Member> members = discord.getGuildById( guild ).getMembers();
         
         for( Member m : members )
-            setRemoteVar( "user." + m.getUser().getId() + ".name", m.getEffectiveName() );
+            setRemoteVar( "user." + m.getUser().getId() + "._name", m.getEffectiveName() );
     }
     
     private static String getMild( int num )
