@@ -30,7 +30,7 @@ public class Launcher
     				System.err.println( "Error shutting down JDA: JDA has not been initialized!" );
     		} ) );
     		System.out.println( "Connecting..." );
-    		SpicyBot.discord = builder.buildBlocking();
+    		builder.buildBlocking();
     		System.out.println( "Connected!" );
 		} catch( LoginException e )
     	{

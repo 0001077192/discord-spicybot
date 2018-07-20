@@ -89,6 +89,7 @@ public class SpicyBot extends ListenerAdapter
     @SubscribeEvent
     public void onReady( ReadyEvent evt )
     {
+        discord = evt.getJDA();
         discord.getGuildById( guild ).getTextChannelById( channel ).sendMessage( "Spicy Bot has been enabled." ).queue();
         updateNames();
     }
